@@ -3,9 +3,14 @@ import UserList from './components/UserList';
 import axios from 'axios';
 import './App.css';
 
+const initialState = {
+	name: '',
+	bio: '',
+};
+
 function App() {
 	const [users, setUsers] = useState([]);
-	const [newUser, setNewUser] = useState({});
+	const [newUser, setNewUser] = useState(initialState);
 
 	const getData = () => {
 		axios
@@ -22,12 +27,17 @@ function App() {
 		setNewUser({ ...newUser, [e.target.name]: e.target.value });
 	};
 
+	const clear = () => {
+		setNewUser(initialState);
+	};
+
 	const addUser = (e) => {
 		e.preventDefault();
 		axios
 			.post('http://localhost:5000/api/users', newUser)
 			.then(() => {
 				getData();
+				clear();
 			})
 			.catch((err) => {
 				console.log(`Error: ${err.response.data.errorMessage}`);
